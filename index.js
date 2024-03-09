@@ -10,9 +10,15 @@ import usuarioRoutes from './routes/usuarioRoutes.js' //Rutas
 const app = express();
 
 /**
+ * Habilitar Pug
+ */
+app.set('view engine', 'pug');
+app.set('views', './views');
+
+/**
  * Routing
  */
-app.use('/', usuarioRoutes);
+app.use('/auth', usuarioRoutes);
 
 /**
  * Definición del puerto y arranque de la app

@@ -8,8 +8,8 @@ const router = express.Router();
 /**
  * Rutas
  */
-router.get('/',function(req,res){
-    res.send('Hola Mundo en Express');
+router.get('/login',function(req,res){
+    res.render('auth/login');
 });
 
 export default router;
