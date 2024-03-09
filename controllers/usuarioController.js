@@ -3,9 +3,10 @@
  */
 
 /**
- * Función diseñada para mostrar el login de los usuarios.
+ * Función diseñada para mostrar formulario para el login de los usuarios.
  * @param {*} req Representa la petición.
  * @param {*} res Representa la respuesta.
+ * @param pageName Representa el nombre de la página.
  */
 const formularioLogin = (req,res) => {
     res.render('auth/login', {
@@ -14,9 +15,10 @@ const formularioLogin = (req,res) => {
 }
 
 /**
- * Función diseñada para mostrar el registro de los usuarios
+ * Función diseñada para mostrar el formulario de registro de usuario.
  * @param {*} req Representa la petición.
  * @param {*} res Representa la respuesta.
+ * @param pageName Representa el nombre de la página.
  */
 const formularioRegistro = (req,res) => {
     res.render('auth/register', {
@@ -25,9 +27,22 @@ const formularioRegistro = (req,res) => {
 }
 
 /**
+ * Función diseñada para mostrar el formulario de recordar contraseña.
+ * @param {*} req Representa la petición.
+ * @param {*} res Representa la respuesta.
+ * @param pageName Representa el nombre de la página.
+ */
+const formularioOlvidePassword = (req,res) => {
+    res.render('auth/olvide-password', {
+        pageName : 'Recordar Contaseña'
+    })
+}
+
+/**
  * Configuración de los exports
  */
 export{
     formularioLogin,
-    formularioRegistro
+    formularioRegistro,
+    formularioOlvidePassword
 }

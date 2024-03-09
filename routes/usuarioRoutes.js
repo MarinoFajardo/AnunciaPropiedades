@@ -2,7 +2,7 @@
  * Importaciones
  */
 import express from 'express'; //Express
-import {formularioLogin, formularioRegistro} from '../controllers/usuarioController.js'
+import {formularioLogin, formularioOlvidePassword, formularioRegistro} from '../controllers/usuarioController.js'
 
 const router = express.Router();
 
@@ -11,5 +11,6 @@ const router = express.Router();
  */
 router.get('/login', formularioLogin);
 router.get('/register',formularioRegistro)
+router.get('/olvide-password',formularioOlvidePassword);
 
 export default router;
