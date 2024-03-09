@@ -2,6 +2,7 @@
  * Cargar las dependencias
  */
 import express from 'express' //Express
+import usuarioRoutes from './routes/usuarioRoutes.js' //Rutas
 
 /**
  * Creación de la Aplicación.
@@ -11,9 +12,7 @@ const app = express();
 /**
  * Routing
  */
-app.get('/',function(req,res){
-    res.send('Hola Mundo en Express');
-});
+app.use('/', usuarioRoutes);
 
 /**
  * Definición del puerto y arranque de la app
