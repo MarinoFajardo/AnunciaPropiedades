@@ -16,6 +16,11 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 
 /**
+ * Carpeta Pública
+ */
+app.use(express.static('public'));
+
+/**
  * Routing
  */
 app.use('/auth', usuarioRoutes);
