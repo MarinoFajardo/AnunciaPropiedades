@@ -11,6 +11,11 @@ import db from './config/db.js';
 const app = express();
 
 /**
+ * Habilitar lectura de formularios
+ */
+app.use(express.urlencoded({extended:true}))
+
+/**
  * Conexión a la BDD
  */
 try {

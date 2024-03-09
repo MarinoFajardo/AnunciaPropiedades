@@ -17,13 +17,22 @@ const formularioLogin = (req,res) => {
 /**
  * Función diseñada para mostrar el formulario de registro de usuario.
  * @param {*} req Representa la petición.
- * @param {*} res Representa la respuesta.
+ * @param {*} res Representa la petición.
  * @param pageName Representa el nombre de la página.
  */
 const formularioRegistro = (req,res) => {
     res.render('auth/register', {
         pageName : 'Crear Cuenta'
     })
+}
+
+/**
+ * Función diseñada para registrar a un usuario en el sistema.
+ * @param {*} req Representa la petición.
+ * @param {*} res Representa la petición.
+ */
+const registrar = (req,res) => {
+    console.log(req.body);
 }
 
 /**
@@ -44,5 +53,6 @@ const formularioOlvidePassword = (req,res) => {
 export{
     formularioLogin,
     formularioRegistro,
-    formularioOlvidePassword
+    formularioOlvidePassword,
+    registrar
 }
