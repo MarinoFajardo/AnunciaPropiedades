@@ -9,7 +9,7 @@
  */
 const formularioLogin = (req,res) => {
     res.render('auth/login', {
-
+        pageName: 'Iniciar Sesión'
     })
 }
 
