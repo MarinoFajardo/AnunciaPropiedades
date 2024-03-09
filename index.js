@@ -3,11 +3,22 @@
  */
 import express from 'express' //Express
 import usuarioRoutes from './routes/usuarioRoutes.js' //Rutas
+import db from './config/db.js';
 
 /**
  * Creación de la Aplicación.
  */
 const app = express();
+
+/**
+ * Conexión a la BDD
+ */
+try {
+    await db.authenticate();
+    console.log('Conexión correcta a la DB');
+} catch (error) {
+    console.log(error);
+}
 
 /**
  * Habilitar Pug
