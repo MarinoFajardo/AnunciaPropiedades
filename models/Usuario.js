@@ -7,6 +7,7 @@
  */
 
 import { DataTypes } from "sequelize"; //Sequelize
+import bcrypt from 'bcrypt' //Encriptado de password
 import db from "../config/db.js"; //Base de Datos
 
 /**
@@ -30,6 +31,14 @@ const Usuario = db.define('usuarios',{
     },
     confirmado: {
         type: DataTypes.BOOLEAN
+    }
+},
+{
+    hooks: {
+        beforeCreate: async function(usuario){
+            const salt = await bcrypt.genSalt(10);
+            usuario.password = await bcrypt.hash(usuario.password,salt);
+        }
     }
 });
 

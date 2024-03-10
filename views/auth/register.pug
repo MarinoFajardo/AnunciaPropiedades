@@ -16,10 +16,10 @@ block contenido
                 form.space-y-2(method="POST" action="/auth/register")
                     div
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="nombre") Nombre
-                        input#nombre.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Introduce tu Nombre" type="text" name="nombre")
+                        input#nombre.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Introduce tu Nombre" type="text" name="nombre" value= usuario ? usuario.nombre : '')
                     div
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="email") Email
-                        input#email.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Introduce tu Email" type="email" name="email")
+                        input#email.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Introduce tu Email" type="email" name="email" value= usuario ? usuario.email : '')
                     div
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="password") Contraseña
                         input#password.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Introduce tu Contraseña" type="password" name="password")
