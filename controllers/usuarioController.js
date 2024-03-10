@@ -8,6 +8,7 @@
 import {check,validationResult} from 'express-validator' // Validación de Express
 import Usuario from '../models/Usuario.js'; //Usuario
 import {generarId} from '../helpers/tokens.js' // Token
+import {emailRegistro} from '../helpers/emails.js' //Emails
 
 /**
  * Función diseñada para mostrar formulario para el login de los usuarios.
@@ -88,12 +89,29 @@ const registrar = async (req,res) => {
     /**
      * Almacenar el usuario
      */
-    await Usuario.create({
+    const usuario = await Usuario.create({
         nombre,
         email,
         password,
         token: generarId()
     });
+
+    /**
+     * Enviar el email de confiración
+     */
+    emailRegistro({
+        nombre: usuario.nombre,
+        email: usuario.email,
+        token: usuario.token
+    });
+
+    /**
+     * Mostrar mensaje de confirmación
+     */
+    res.render('templates/mensaje',{
+        pageName : 'Cuenta Creada Correctamente',
+        mensaje: 'Hemos enviado un email de confirmación, presiona en el enlace'
+    })
 }
 
 /**
