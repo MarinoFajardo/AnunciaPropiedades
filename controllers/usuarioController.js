@@ -3,6 +3,12 @@
  */
 
 /**
+ * Imports
+ */
+import {check,validationResult} from 'express-validator'
+import Usuario from '../models/Usuario.js'; //Usuario
+
+/**
  * Función diseñada para mostrar formulario para el login de los usuarios.
  * @param {*} req Representa la petición.
  * @param {*} res Representa la respuesta.
@@ -31,8 +37,31 @@ const formularioRegistro = (req,res) => {
  * @param {*} req Representa la petición.
  * @param {*} res Representa la petición.
  */
-const registrar = (req,res) => {
-    console.log(req.body);
+const registrar = async (req,res) => {
+
+    /**
+     * Reglas de validación
+     */
+    await check('nombre').notEmpty().withMessage("El campo nombre no puede estar vacío").run(req);
+    await check('email').isEmail().withMessage("Email no válido").run(req);
+    await check('password').isLength({min: 6}).withMessage("La contraseña debe tener al menos 6 caracteres").run(req);
+    await check('repetir_password').equals('password').withMessage("Las contraseñas no son iguales").run(req);
+    let resultado = validationResult(req);
+
+    /**
+     * Verificar que no hay errores y si los hay mostrarlos en el formulario
+     */
+    if(!resultado.isEmpty()){
+        //Hay errores
+        return res.render('auth/register', {
+            pageName : 'Crear Cuenta',
+            errores: resultado.array()
+        })
+    }
+
+
+    //const usuario = await Usuario.create(req.body);
+    //res.json(usuario);
 }
 
 /**

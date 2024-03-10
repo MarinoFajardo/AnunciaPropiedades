@@ -7,7 +7,7 @@
  */
 
 import { DataTypes } from "sequelize"; //Sequelize
-import db from "../config/db"; //Base de Datos
+import db from "../config/db.js"; //Base de Datos
 
 /**
  * Instanciación de los Usuarios
