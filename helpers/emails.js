@@ -31,7 +31,7 @@ const emailRegistro = async(datos) => {
         html: `
                 <p> Hola ${nombre}, comprueba tu cuenta en AnunciaPropiedades.com</p>
                 <p> Tu cuenta ya está lista, solo debes confirmarla en el siguiente enlace: 
-                <a href="">Confirmar Cuenta</a> </p>
+                <a href="https://localhost:3000/auth/confirmar/${token}">Confirmar Cuenta</a> </p>
                 <p> Si tu no has creado esta cuenta puedes ignorar el mensaje</p>
         `
     })

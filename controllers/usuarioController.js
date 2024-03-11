@@ -19,6 +19,7 @@ import {emailRegistro} from '../helpers/emails.js' //Emails
 const formularioLogin = (req,res) => {
     res.render('auth/login', {
         pageName: 'Iniciar Sesión'
+        
     })
 }
 
@@ -30,7 +31,8 @@ const formularioLogin = (req,res) => {
  */
 const formularioRegistro = (req,res) => {
     res.render('auth/register', {
-        pageName : 'Crear Cuenta'
+        pageName : 'Crear Cuenta',
+        csrfToken: req.csrfToken()
     })
 }
 
@@ -60,7 +62,8 @@ const registrar = async (req,res) => {
             errores: resultado.array(),
             usuario: {
                 nombre: req.body.nombre,
-                email: req.body.email
+                email: req.body.email,
+                csrfToken: req.csrfToken()
             }
         });
     }
@@ -78,6 +81,7 @@ const registrar = async (req,res) => {
         //El usuario ya existe
         return res.render('auth/register', {
             pageName : 'Crear Cuenta',
+            csrfToken: req.csrfToken(),
             errores: [{msg: 'El usuario ya está registrado'}],
             usuario: {
                 nombre: req.body.nombre,
@@ -115,6 +119,35 @@ const registrar = async (req,res) => {
 }
 
 /**
+ * Función para comprobar una cuenta
+ * @param {*} req Representa la petición.
+ * @param {*} res Representa la respuesta.
+ */
+const confirmar = async (req,res) => {
+    const {token} = req.params;
+    /**
+     * Verificar si el token es correcto y en caso de que lo sea confirmar la cuenta
+     */
+    const usuario = await Usuario.findOne({where: {token}});
+    if(!usuario){
+        return res.render('auth/confirmarcuenta',{
+            pageName : 'Error al confirmar tu cuenta',
+            mensaje: 'Hubo un error al confirmar tu cuenta, inténtalo de nuevo',
+            error: true
+        })
+    }
+    usuario.token = null;;
+    usuario.confirmado = true;
+    await usuario.save();
+
+    res.render('auth/confirmarcuenta',{
+        pageName : 'Cuenta Confirmada',
+        mensaje: 'La cuenta se ha confirado corectamente'
+    })
+
+}
+
+/**
  * Función diseñada para mostrar el formulario de recordar contraseña.
  * @param {*} req Representa la petición.
  * @param {*} res Representa la respuesta.
@@ -133,5 +166,6 @@ export{
     formularioLogin,
     formularioRegistro,
     formularioOlvidePassword,
-    registrar
+    registrar,
+    confirmar
 }
