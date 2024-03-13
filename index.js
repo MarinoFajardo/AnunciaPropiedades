@@ -4,7 +4,8 @@
 import express from 'express' //Express
 import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
-import usuarioRoutes from './routes/usuarioRoutes.js' //Rutas
+import usuarioRoutes from './routes/usuarioRoutes.js'; //Rutas usuario
+import propiedadesRoutes from './routes/propiedadesRoutes.js'; //Rutas propiedades
 import db from './config/db.js'; //Base de Datos
 
 /**
@@ -53,6 +54,7 @@ app.use(express.static('public'));
  * Routing
  */
 app.use('/auth', usuarioRoutes);
+app.use('/',propiedadesRoutes);
 
 /**
  * Definición del puerto y arranque de la app
