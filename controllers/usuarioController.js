@@ -8,7 +8,7 @@
 import {check,validationResult} from 'express-validator' // Validación de Express
 import bcrypt from 'bcrypt' //Encriptado de password
 import Usuario from '../models/Usuario.js'; //Usuario
-import {generarId} from '../helpers/tokens.js' // Token
+import {generarId,generarJWT} from '../helpers/tokens.js' // Token
 import {emailRegistro,emailOlvidePassword} from '../helpers/emails.js' //Emails
 
 /**
@@ -18,7 +18,8 @@ import {emailRegistro,emailOlvidePassword} from '../helpers/emails.js' //Emails
  */
 const formularioLogin = (req,res) => {
     res.render('auth/login', {
-        pageName: 'Iniciar Sesión'
+        pageName: 'Iniciar Sesión',
+        csrfToken: req.csrfToken()
         
     })
 }
@@ -288,6 +289,74 @@ const nuevoPassword = async (req,res) => {
 }
 
 /**
+ * Función para autenticar a un usuario
+ * @param {*} req Representa la petición.
+ * @param {*} res Representa la respuesta.
+ */
+const autenticar = async (req,res) => {
+    /**
+     * Validación
+     */
+    await check('email').isEmail().withMessage("Email no válido").run(req);
+    await check('password').notEmpty().withMessage("La Contraseña es obligatoria").run(req);
+    let resultado = validationResult(req);
+    /**
+     * Verificar que no hay errores y si los hay mostrarlos en el formulario
+     */
+    if(!resultado.isEmpty()){
+        //Hay errores
+        return res.render('auth/login', {
+            pageName : 'Iniciar Sesión',
+            errores: resultado.array(),
+            csrfToken: req.csrfToken()
+        });
+    }
+
+    const {email,password} = req.body;
+
+    /**
+     * Comprobar si el usuario existe y ha verificado su cuenta
+     */
+    const usuario = await Usuario.findOne({where: {email}});
+    if(!usuario){
+        return res.render('auth/login', {
+            pageName : 'Iniciar Sesión',
+            errores: [{msg: 'El usuario no existe'}],
+            csrfToken: req.csrfToken()
+        });
+    }
+
+    if(!usuario.confirmado){
+        return res.render('auth/login', {
+            pageName : 'Iniciar Sesión',
+            errores: [{msg: 'Tu cuenta no ha sido confirmada'}],
+            csrfToken: req.csrfToken()
+        });
+    }
+
+    /**
+     * Revisar la contraseña
+     */
+    if(!usuario.verificarPassword(password)){
+        //Contraseña incorrecta
+        return res.render('auth/login', {
+            pageName : 'Iniciar Sesión',
+            errores: [{msg: 'La contraseña no es correcta'}],
+            csrfToken: req.csrfToken()
+        });
+    }
+
+    /**
+     * Autenticar al usuario, almacenar el JWT en una cookie y redireccionar a sus propiedades
+     */
+    const token = generarJWT({id: usuario.id, nombre: usuario.nombre})
+    return res.cookie('_token',token,{
+        httpOnly: true,
+        //secure:true
+    }).redirect('/mis-propiedades');
+}
+
+/**
  * Configuración de los exports
  */
 export{
@@ -298,5 +367,6 @@ export{
     confirmar,
     resetPassword,
     comprobarToken,
-    nuevoPassword
+    nuevoPassword,
+    autenticar
 }
