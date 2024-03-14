@@ -2,7 +2,7 @@
  * Importaciones
  */
 import express from 'express'; //Express
-import { admin } from '../controllers/propiedadController.js';
+import { admin,crear } from '../controllers/propiedadController.js';
 
 
 const router = express.Router();
@@ -12,5 +12,7 @@ const router = express.Router();
  */
 
 router.get('/mis-propiedades',admin);
+
+router.get('/propiedades/crear',crear)
 
 export default router;

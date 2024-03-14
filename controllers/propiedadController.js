@@ -5,8 +5,13 @@
 /**
  * Imports
  */
+import {check,validationResult} from 'express-validator' // Validación de Express
 
-
+/**
+ * Función para mostrar la página con las propiedades del usuario.
+ * @param {*} req Representa la petición.
+ * @param {*} res Representa la respuesta.
+ */
 const admin = (req,res) => {
     res.render('propiedades/admin', {
         pageName: 'Mis Propiedades',
@@ -16,8 +21,22 @@ const admin = (req,res) => {
 }
 
 /**
+ * Forulario para crear una nueva propiedad.
+ * @param {*} req Representa la petición.
+ * @param {*} res Representa la respuesta.
+ */
+const crear = (req,res) => {
+    res.render('propiedades/crear', {
+        pageName: 'Crear Propiedad',
+        barra: true,
+        csrfToken: req.csrfToken()     
+    })
+}
+
+/**
  * Configuración de los exports
  */
 export{
-    admin
+    admin,
+    crear
 }
