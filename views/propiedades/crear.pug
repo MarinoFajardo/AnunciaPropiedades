@@ -19,17 +19,25 @@ block contenido
                     div
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="titulo") Título de Anuncio
                         input#titulo.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Introduce el título del anuncio" type="text" name="titulo")
-                    
+
+                    div
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="descripcion") Descripción de la Propiedad
+                        textarea#descripcion.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Introduce la descripcion del anuncio" name="descripcion")
+
                     div(class="md:flex md:gap-4 space-y-5 md:space-y-0")
                         div(class="md:w-1/2")
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="categoria") Categoría
                             select#categoria.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(name="categoria")
                                 option(value="") - Seleccione Categoría -
+                                each categoria in categorias
+                                    option(value=categoria.id)= categoria.nombre
 
                         div(class="md:w-1/2")
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="precio") Precio
                             select#precio.w-full.px-3.py-3.border.border-gray-300.rounded-md.placeholder-gray-400(name="precio")
                                 option(value="") - Seleccione Rango -
+                                each precio in precios
+                                    option(value=precio.id)= precio.nombre
 
                     div(class="md:flex md:gap-4 space-y-5 md:space-y-0")
                         div(class="md:w-1/3")
