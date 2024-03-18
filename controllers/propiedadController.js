@@ -5,9 +5,8 @@
 /**
  * Imports
  */
-import {check,validationResult} from 'express-validator' // Validación de Express
-import Categoria from '../models/Categoria.js';
-import Precio from '../models/Precio.js';
+import {validationResult} from 'express-validator' // Validación de Express
+import {Precio,Categoria,Propiedad} from '../models/index.js'
 
 /**
  * Función para mostrar la página con las propiedades del usuario.
@@ -45,10 +44,61 @@ const crear = async (req,res) => {
     })
 }
 
+const guardar = async (req,res) => {
+    /**
+     * Validación de los campos, en este caso se hace en el archivo de rutas
+     */
+    let resultado = validationResult(req);
+    if(!resultado.isEmpty()){
+        /**
+        * Consultar los modelos del precio y las categorias
+        */
+        const [categorias,precios] = await Promise.all([
+            Categoria.findAll(),
+            Precio.findAll()
+        ])
+
+        res.render('propiedades/crear', {
+            pageName: 'Crear Propiedad',
+            barra: true,
+            csrfToken: req.csrfToken() ,
+            categorias,
+            precios ,
+            errores: resultado.array(),
+            datos: req.body
+        })
+    }
+
+    /**
+     * Creación del registro de la propiedad
+     */
+    const {titulo,descripcion,habitaciones,estacionamiento,wc,calle,lat,lng, precio: precioId,categoria:categoriaId} = req.body
+    try {
+        const propiedadGuardada = await Propiedad.create(
+            {
+                titulo,
+                descripcion,
+                habitaciones,
+                estacionamiento,
+                wc,
+                calle,
+                lat,
+                lng,
+                precioId,
+                categoriaId
+            }
+        )
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
 /**
  * Configuración de los exports
  */
 export{
     admin,
-    crear
+    crear,
+    guardar
 }
