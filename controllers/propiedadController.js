@@ -40,7 +40,8 @@ const crear = async (req,res) => {
         barra: true,
         csrfToken: req.csrfToken() ,
         categorias,
-        precios  
+        precios,
+        datos: [] 
     })
 }
 
@@ -63,7 +64,7 @@ const guardar = async (req,res) => {
             barra: true,
             csrfToken: req.csrfToken() ,
             categorias,
-            precios ,
+            precios,
             errores: resultado.array(),
             datos: req.body
         })
@@ -73,6 +74,7 @@ const guardar = async (req,res) => {
      * Creación del registro de la propiedad
      */
     const {titulo,descripcion,habitaciones,estacionamiento,wc,calle,lat,lng, precio: precioId,categoria:categoriaId} = req.body
+    const {id: usuarioId} = req.usuario
     try {
         const propiedadGuardada = await Propiedad.create(
             {
@@ -85,9 +87,14 @@ const guardar = async (req,res) => {
                 lat,
                 lng,
                 precioId,
-                categoriaId
+                categoriaId,
+                usuarioId,
+                imagen: ''
+
             }
         )
+        const {id} =propiedadGuardada
+        res.redirect('/propiedades/agregar-imagen/${id}')
     } catch (error) {
         console.log(error);
     }
