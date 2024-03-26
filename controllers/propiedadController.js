@@ -15,19 +15,52 @@ import {Precio,Categoria,Propiedad} from '../models/index.js'
  * @param {*} res Representa la respuesta.
  */
 const admin = async(req,res) => {
-    const {id} = req.usuario;
-    const propiedades = await Propiedad.findAll({
-        where: {usuarioId : id},
-        include: [
-            {model: Categoria, as:'categoria'},
-            {model: Precio, as: 'precio'}
-        ]
-    });
-    res.render('propiedades/admin', {
-        pageName: 'Mis Propiedades',
-        propiedades,
-        csrfToken: req.csrfToken()
-    })
+    /**
+     * Leer el QueryString
+     */
+    const {pagina: paginaActual} = req.query
+    const expresion = /^[0-9]$/
+    if(!expresion.test(paginaActual)){
+        return res.redirect('/mis-propiedades?pagina=1')
+    }
+
+    try {
+        /**
+         * Límite y offset del Paginador
+         */
+        const limit = 10;
+        const offset = ((paginaActual * limit) - limit)
+        const {id} = req.usuario;
+        const [propiedades,total] = await Promise.all([
+            Propiedad.findAll({
+                limit,
+                offset,
+                where: {usuarioId : id},
+                include: [
+                    {model: Categoria, as:'categoria'},
+                    {model: Precio, as: 'precio'}
+                ]
+            }),
+            Propiedad.count({
+                where: {
+                    usuarioId : id
+                }
+            })
+        ]);
+        res.render('propiedades/admin', {
+            pageName: 'Mis Propiedades',
+            propiedades,
+            csrfToken: req.csrfToken(),
+            paginas: Math.ceil(total/limit),
+            paginaActual: Number(paginaActual),
+            total,
+            offset,
+            limit
+        }) 
+    } catch (error) {
+        console.log(error);
+    }
+    
 }
 
 /**
